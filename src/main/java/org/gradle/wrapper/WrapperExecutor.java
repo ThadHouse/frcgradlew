@@ -81,7 +81,7 @@ public class WrapperExecutor {
 
     private String readOfflineDistroUrl() throws URISyntaxException {
         if (properties.getProperty(OFFLINE_DISTRIBUTION_URL_PROPERTY) == null) {
-            reportMissingProperty(OFFLINE_DISTRIBUTION_URL_PROPERTY);
+            return "";
         }
         return getProperty(OFFLINE_DISTRIBUTION_URL_PROPERTY);
     }
@@ -118,7 +118,7 @@ public class WrapperExecutor {
 
     private URI readDistroUrl() throws URISyntaxException {
         if (properties.getProperty(DISTRIBUTION_URL_PROPERTY) == null) {
-            reportMissingProperty(DISTRIBUTION_URL_PROPERTY);
+            //reportMissingProperty(DISTRIBUTION_URL_PROPERTY);
         }
         return new URI(getProperty(DISTRIBUTION_URL_PROPERTY));
     }
