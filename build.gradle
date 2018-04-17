@@ -1,0 +1,14 @@
+plugins {
+  id 'java'
+}
+
+task executableJar(type: Jar) {
+    // gradle-wrapper.jar will be part of the plugins.jar - so it needs to be identical for now
+    reproducibleFileOrder = true
+    preserveFileTimestamps = false
+    archiveName = 'gradle-wrapper.jar'
+    from sourceSets.main.output
+    from configurations.runtime.allDependencies.withType(ProjectDependency).collect { it.dependencyProject.sourceSets.main.output }
+}
+
+build.dependsOn executableJar
