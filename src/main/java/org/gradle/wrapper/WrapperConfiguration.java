@@ -19,7 +19,6 @@ import java.net.URI;
 
 public class WrapperConfiguration {
     private URI distribution;
-    private URI offlineDistribution;
     private String distributionBase = PathAssembler.GRADLE_USER_HOME_STRING;
     private String distributionPath = Install.DEFAULT_DISTRIBUTION_PATH;
     private String distributionSha256Sum;
@@ -32,14 +31,6 @@ public class WrapperConfiguration {
 
     public void setDistribution(URI distribution) {
         this.distribution = distribution;
-    }
-
-    public URI getOfflineDistribution() {
-        return offlineDistribution;
-    }
-
-    public void setOfflineDistribution(URI offlineDistribution) {
-        this.offlineDistribution = offlineDistribution;
     }
 
     public String getDistributionBase() {

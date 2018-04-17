@@ -38,14 +38,7 @@ public class Install {
     }
 
     public File createDist(final WrapperConfiguration configuration) throws Exception {
-        URI settableDistributionUrl = configuration.getOfflineDistribution();
-
-        if (!new File(settableDistributionUrl).isFile()) {
-            settableDistributionUrl = configuration.getDistribution();
-        }
-
-        final URI distributionUrl = settableDistributionUrl;
-
+        final URI distributionUrl = configuration.getDistribution();
         final String distributionSha256Sum = configuration.getDistributionSha256Sum();
 
         final PathAssembler.LocalDistribution localDistribution = pathAssembler.getDistribution(configuration);

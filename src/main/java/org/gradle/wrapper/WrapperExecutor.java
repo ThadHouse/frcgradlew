@@ -21,15 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class WrapperExecutor {
     public static final String DISTRIBUTION_URL_PROPERTY = "distributionUrl";
-    public static final String OFFLINE_DISTRIBUTION_URL_PROPERTY = "offlineDistributionUrl";
     public static final String DISTRIBUTION_BASE_PROPERTY = "distributionBase";
     public static final String DISTRIBUTION_PATH_PROPERTY = "distributionPath";
     public static final String DISTRIBUTION_SHA_256_SUM = "distributionSha256Sum";
@@ -57,7 +52,6 @@ public class WrapperExecutor {
             try {
                 loadProperties(propertiesFile, properties);
                 config.setDistribution(prepareDistributionUri());
-                config.setOfflineDistribution(prepareOfflineDistributionUri());
                 config.setDistributionBase(getProperty(DISTRIBUTION_BASE_PROPERTY, config.getDistributionBase()));
                 config.setDistributionPath(getProperty(DISTRIBUTION_PATH_PROPERTY, config.getDistributionPath()));
                 config.setDistributionSha256Sum(getProperty(DISTRIBUTION_SHA_256_SUM, config.getDistributionSha256Sum(), false));
@@ -77,43 +71,6 @@ public class WrapperExecutor {
         } else {
             return source;
         }
-    }
-
-    private String readOfflineDistroUrl() throws URISyntaxException {
-        if (properties.getProperty(OFFLINE_DISTRIBUTION_URL_PROPERTY) == null) {
-            reportMissingProperty(OFFLINE_DISTRIBUTION_URL_PROPERTY);
-        }
-        return getProperty(OFFLINE_DISTRIBUTION_URL_PROPERTY);
-    }
-
-
-    private URI prepareOfflineDistributionUri() throws URISyntaxException {
-        String source = readOfflineDistroUrl();
-        // We will support the use of enviromental variables here. With %ENV_VAR_HERE%
-        final String regex = "(%[^%]+%)";
-
-        final Pattern pattern = Pattern.compile(regex);
-        final Matcher matcher = pattern.matcher(source);
-
-        Map<String, String> envVar = new HashMap<>();
-
-        while (matcher.find()) {
-            String key = matcher.group(0);
-            if (!envVar.containsKey(key)) {
-                String strippedKey = key.substring(1, key.length() - 1);
-                String env = System.getenv(strippedKey);
-                if (env == null) {
-                    env = key;
-                }
-                envVar.put(key, env);
-            }
-        }
-
-        for (Map.Entry<String, String> env : envVar.entrySet()) {
-            source = source.replace(env.getKey(), env.getValue());
-        }
-
-        return new File(source).toURI();
     }
 
     private URI readDistroUrl() throws URISyntaxException {
